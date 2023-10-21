@@ -1,13 +1,44 @@
-<html>
-    <head>
-        <script src="./controller/home.js">
-    
-        </script>
-    </head>
-    <div>
-        Home Page
-    </div>
-    <div>
-        <button click="">Show Tree</button>
-    </div>
-</html>
+<!-- Temporary file for showing the view portion-->>
+<br><button>Get Animals</button>
+<br><br><br>
+<form>
+    <input type="text" id="parentId" name="parentId" placeholder="Provide parent id">
+    <br>
+    <input type="text" id="animalName" name="animalName" placeholder="Provide animal name">
+    <br>
+    <input type="submit" id="submit" value="Add animal">
+</form>
+<div></div>
+<script src="http://code.jquery.com/jquery-2.1.4.min.js"></script>
+<script type="text/javascript">
+    $(document).ready(function () {
+        $(document).on('click', 'button', function () {
+            $.ajax({
+                url: "http://localhost:3001/api/tree"
+            }).done(function (resp) {
+                $('div').append('<br>' + JSON.stringify(resp, null, 4));
+            });
+        });
+
+        $("#submit").click(function () {
+            let parentId = $("#parentId").val();
+            let animalName = $("#animalName").val();
+            const requestBody = {
+                parent: parentId,
+                label: animalName
+            };
+            $.ajax({
+                url: "http://localhost:3001/api/tree",
+                type: "POST",
+                data: JSON.stringify(requestBody),
+                contentType: "application/json",
+                success: function (data) {
+                    console.log(data);
+                },
+                error: function (xhr, status, error) {
+                    console.log(error);
+                },
+            });
+        });
+    });
+</script>
