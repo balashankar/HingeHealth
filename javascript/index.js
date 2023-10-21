@@ -1,21 +1,22 @@
+// Importing express framework. Express will provide simplified way of creating server side scripting.
 const express = require('express');
-const fs = require('fs'); 
-const { getTree } = require('./api/getTree');
-const { postTree } = require('./api/postTree');
-
-//create an express server and set the port to run
 const app = express();
-const port = 3001;
 
-// Parse JSON request bodies
-app.use(express.json());
+// Need to run 'npm i path' to install path package. This will create instance for file paths.
+const path = require('path');
 
+/* Assigning the defined port in the assignment. 
+While moving to higher environment/stage, alternative is provided. */
+const PORT = 3001 || process.env.port;
 
 // Route handlers to be defined below
-app.get('/api/tree', getTree);
-app.post('/api/tree', postTree);
+const{getTree, postTree} = require("./api/tree");
 
+//creating get api call
+app.get('^/$|/home(.html)?',(req, res)=>{
+  res.sendFile(path.join(__dirname,'views','home.html'));
+})
 
-app.listen(port, () => {
-  console.log(`Server is running on port ${port}`);
+app.listen(PORT, () => {
+  console.log(`Server is running on port ${PORT}`);
 });
